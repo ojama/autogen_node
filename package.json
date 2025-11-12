@@ -9,6 +9,7 @@
     "dev": "nodemon --watch src --ext ts --exec ts-node src/examples/basic-chat.ts",
     "example:basic": "ts-node src/examples/basic-chat.ts",
     "example:auto": "ts-node src/examples/automated-chat.ts",
+    "example:group": "ts-node src/examples/group-chat.ts",
     "clean": "rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

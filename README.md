@@ -11,6 +11,7 @@ This project brings the powerful multi-agent orchestration capabilities of Micro
 - **Base Agent Framework**: Core interfaces and abstract classes for building custom agents
 - **AssistantAgent**: OpenAI-powered conversational agent (similar to .NET's AssistantAgent)
 - **UserProxyAgent**: Human-in-the-loop agent for interactive conversations
+- **Group Chat**: Multi-agent collaboration system for complex tasks
 - **Type-Safe**: Built with TypeScript for enhanced developer experience
 - **Flexible Message System**: Support for different message types and roles
 - **Conversation Management**: Built-in conversation history and state management
@@ -118,8 +119,14 @@ OPENAI_API_KEY=your_openai_api_key_here
 # Build the project
 npm run build
 
-# Run the basic example
+# Run the basic interactive example
 npm run example:basic
+
+# Run the automated two-agent conversation
+npm run example:auto
+
+# Run the group chat example
+npm run example:group
 
 # Development mode with auto-reload
 npm run dev
@@ -161,6 +168,41 @@ const user = new UserProxyAgent({
 // Agent will auto-reply without human intervention
 ```
 
+### Group Chat with Multiple Agents
+
+```typescript
+import { AssistantAgent, GroupChat, GroupChatManager } from './src/index';
+
+// Create multiple specialized agents
+const designer = new AssistantAgent({
+  name: 'designer',
+  apiKey: process.env.OPENAI_API_KEY!,
+  systemMessage: 'You are a creative designer.',
+  model: 'gpt-3.5-turbo'
+});
+
+const engineer = new AssistantAgent({
+  name: 'engineer',
+  apiKey: process.env.OPENAI_API_KEY!,
+  systemMessage: 'You are a practical engineer.',
+  model: 'gpt-3.5-turbo'
+});
+
+// Create group chat
+const groupChat = new GroupChat({
+  agents: [designer, engineer],
+  maxRound: 10
+});
+
+// Create manager
+const manager = new GroupChatManager({
+  groupChat: groupChat
+});
+
+// Run the discussion
+await manager.runChat('Design a new mobile app feature');
+```
+
 ## Comparison with .NET AutoGen
 
 | Feature | .NET AutoGen | autogen_node |
@@ -169,19 +211,25 @@ const user = new UserProxyAgent({
 | AssistantAgent | ✅ | ✅ |
 | UserProxyAgent | ✅ | ✅ |
 | OpenAI Integration | ✅ | ✅ |
+| Group Chat | ✅ | ✅ |
 | Function Calling | ✅ | 🚧 Planned |
-| Group Chat | ✅ | 🚧 Planned |
 | Code Execution | ✅ | 🚧 Planned |
+| Multiple LLM Providers | ✅ | 🚧 Planned |
 
 ## Roadmap
 
+- [x] Base agent framework
+- [x] AssistantAgent with OpenAI
+- [x] UserProxyAgent
+- [x] Group chat capabilities
 - [ ] Function calling support
-- [ ] Group chat capabilities
 - [ ] Code execution agent
 - [ ] Additional LLM provider integrations (Anthropic, Gemini, etc.)
 - [ ] Advanced conversation patterns
+- [ ] Streaming responses
 - [ ] Testing framework
 - [ ] Comprehensive documentation
+- [ ] Performance optimizations
 
 ## Contributing
 
