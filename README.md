@@ -9,7 +9,11 @@ This project brings the powerful multi-agent orchestration capabilities of Micro
 ## Features
 
 - **Base Agent Framework**: Core interfaces and abstract classes for building custom agents
-- **AssistantAgent**: OpenAI-powered conversational agent (similar to .NET's AssistantAgent)
+- **Multiple LLM Providers**: Support for OpenAI, OpenRouter, and Ollama
+  - **OpenAI**: GPT-3.5, GPT-4, and other OpenAI models
+  - **OpenRouter**: Access to 100+ models from multiple providers
+  - **Ollama**: Run LLMs locally for privacy and offline use
+- **AssistantAgent**: LLM-powered conversational agent with provider flexibility
 - **UserProxyAgent**: Human-in-the-loop agent for interactive conversations
 - **Group Chat**: Multi-agent collaboration system for complex tasks
 - **Type-Safe**: Built with TypeScript for enhanced developer experience
@@ -24,12 +28,15 @@ npm install
 
 ## Quick Start
 
+### Using OpenAI (Default)
+
 ```typescript
 import { AssistantAgent, UserProxyAgent, HumanInputMode } from './src/index';
 
 // Create an AI assistant
 const assistant = new AssistantAgent({
   name: 'assistant',
+  provider: 'openai',  // optional, this is the default
   apiKey: process.env.OPENAI_API_KEY!,
   systemMessage: 'You are a helpful assistant.',
   model: 'gpt-3.5-turbo',
@@ -49,6 +56,32 @@ await userProxy.initiateChat(
   10 // max rounds
 );
 ```
+
+### Using OpenRouter
+
+```typescript
+const assistant = new AssistantAgent({
+  name: 'assistant',
+  provider: 'openrouter',
+  apiKey: process.env.OPENROUTER_API_KEY!,
+  model: 'anthropic/claude-2',
+  temperature: 0.7
+});
+```
+
+### Using Ollama (Local)
+
+```typescript
+const assistant = new AssistantAgent({
+  name: 'assistant',
+  provider: 'ollama',
+  model: 'llama2',
+  temperature: 0.7
+});
+```
+
+See [LLM_PROVIDERS.md](./LLM_PROVIDERS.md) for detailed provider documentation.
+
 
 ## Project Structure
 
@@ -111,6 +144,8 @@ Create a `.env` file in the project root:
 
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
+OPENROUTER_API_KEY=your_openrouter_api_key_here  # Optional
+# OLLAMA_BASE_URL=http://localhost:11434/v1      # Optional
 ```
 
 ## Scripts
@@ -119,14 +154,20 @@ OPENAI_API_KEY=your_openai_api_key_here
 # Build the project
 npm run build
 
-# Run the basic interactive example
+# Run the basic interactive example (OpenAI)
 npm run example:basic
 
-# Run the automated two-agent conversation
+# Run the automated two-agent conversation (OpenAI)
 npm run example:auto
 
-# Run the group chat example
+# Run the group chat example (OpenAI)
 npm run example:group
+
+# Run OpenRouter example
+npm run example:openrouter
+
+# Run Ollama example (local LLM)
+npm run example:ollama
 
 # Development mode with auto-reload
 npm run dev
@@ -212,9 +253,9 @@ await manager.runChat('Design a new mobile app feature');
 | UserProxyAgent | ✅ | ✅ |
 | OpenAI Integration | ✅ | ✅ |
 | Group Chat | ✅ | ✅ |
+| Multiple LLM Providers | ✅ | ✅ (OpenAI, OpenRouter, Ollama) |
 | Function Calling | ✅ | 🚧 Planned |
 | Code Execution | ✅ | 🚧 Planned |
-| Multiple LLM Providers | ✅ | 🚧 Planned |
 
 ## Roadmap
 
@@ -222,13 +263,12 @@ await manager.runChat('Design a new mobile app feature');
 - [x] AssistantAgent with OpenAI
 - [x] UserProxyAgent
 - [x] Group chat capabilities
+- [x] Multiple LLM provider support (OpenAI, OpenRouter, Ollama)
 - [ ] Function calling support
 - [ ] Code execution agent
-- [ ] Additional LLM provider integrations (Anthropic, Gemini, etc.)
+- [ ] Additional LLM provider integrations (Anthropic SDK, Google Gemini, etc.)
 - [ ] Advanced conversation patterns
 - [ ] Streaming responses
-- [ ] Testing framework
-- [ ] Comprehensive documentation
 - [ ] Performance optimizations
 
 ## Contributing

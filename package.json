@@ -10,6 +10,8 @@
     "example:basic": "ts-node src/examples/basic-chat.ts",
     "example:auto": "ts-node src/examples/automated-chat.ts",
     "example:group": "ts-node src/examples/group-chat.ts",
+    "example:openrouter": "ts-node src/examples/openrouter-example.ts",
+    "example:ollama": "ts-node src/examples/ollama-example.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
